@@ -7,8 +7,6 @@ Created on Sat Oct 29 15:00:44 2016
 
 import fb_credentials
 
-## Create global variables
-APP_ID = 0
-SECRET_ID = ''
-
-fb_credentials.main(APP_ID,SECRET_ID)
+## Setting authentication variables
+APP_ID = fb_credentials.set_app_id()
+SECRET_ID = fb_credentials.set_secret_id()
