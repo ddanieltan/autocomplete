@@ -15,9 +15,7 @@ import fb_credentials #hidden file containing my unique app_id and secret_id
 ## Setting authentication variables
 APP_ID = fb_credentials.set_app_id()
 SECRET_ID = fb_credentials.set_secret_id()
-access_token = str(APP_ID) + '|' + SECRET_ID
-
-page_id = 'TheStraitsTimes'
+access_token = APP_ID + '|' + SECRET_ID
 
 def request_until_succeed(url):
   req = urllib2.Request(url)
@@ -85,7 +83,13 @@ def scrapeFacebookPageStatus(page_id, access_token):
         print '\nDone! \n{} statuses processed in {}'.format(num_processed, datetime.datetime.now()-scrape_start_time)
   
 if __name__ == '__main__':
-    scrapeFacebookPageStatus(page_id,access_token)
+    # Top 5 FB pages amongst Singaporeans    
+    page_ids = ['singaporeair', 'sgag.sg', 'flyscoot','mediacorp.singapore','TheMiddleGroundSG']
+    for page_id in page_ids:
+        scrapeFacebookPageStatus(page_id,access_token)
+    
+    
+    
 #    test_status = getFacebookPageFeedData(page_id, access_token, 1)["data"][0]    
 #    processed_test_status = processFacebookPageFeedStatus(test_status)
 #    print processed_test_status
