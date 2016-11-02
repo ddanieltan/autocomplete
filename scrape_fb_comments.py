@@ -28,7 +28,7 @@ def request_until_succeed(url):
     except Exception, e:
       print e
       time.sleep(5)
-      print "Error for URL {}:{}".format(url,datetime.datetime.now())
+      #print "Error for URL {}:{}".format(url,datetime.datetime.now())
   return response.read()
 
 def unicode_normalize(text):
@@ -65,7 +65,7 @@ def processFacebookComment(comment, status_id, parent_id=''):
   comment_published = comment_published.strftime('%Y-%m-%d %H:%M:%S')  
   return (comment_id, comment_message, comment_author, comment_likes, comment_published)
 
-def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
+def scrapeFacebookPageFeedComments(page_id, access_token):
     #writing data to csv
     base_path = '/home/ddan/Desktop/github/autocomplete/data'
     file_name = '{}_fb_comments.csv'.format(page_id)
@@ -87,7 +87,7 @@ def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
                 has_next_page = True
                 comments = getFacebookCommentFeedData(status['status_id'], access_token, 100)
                 
-                while has_next_page and comments is not None and num_processed<max_comments:
+                while has_next_page and comments is not None:
                     for comment in comments['data']:
                         w.writerow(processFacebookComment(comment, status['status_id']))
                         if 'comments' in comment:
@@ -97,8 +97,8 @@ def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
                                 for subcomment in subcomments['data']:
                                     w.writerow(processFacebookComment(subcomment, status['status_id'], comment['id']))
                                     num_processed += 1
-                                    if num_processed % 1000 == 0:
-                                        print '{} comments processed : {}'.format(num_processed, datetime.datetime.now())
+                                    if num_processed % 500 == 0:
+                                        print '\n{}-{} subcomments processed : {}\n'.format(page_id, num_processed, datetime.datetime.now())
                                 if 'paging' in subcomments:
                                     if 'next' in subcomments['paging']:
                                         subcomments = json.loads(request_until_succeed(subcomments['paging']['next']))
@@ -107,8 +107,8 @@ def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
                                 else:
                                     has_next_subpage = False
                         num_processed += 1
-                        if num_processed % 1000 == 0:
-                            print '{} comments processed : {}'.format(num_processed, datetime.datetime.now())
+                        if num_processed % 500 == 0:
+                            print '\n{}-{} comments processed : {}\n'.format(page_id, num_processed, datetime.datetime.now())
                     if 'paging' in comments:
                         if 'next' in comments['paging']:
                             comments = json.loads(request_until_succeed(comments['paging']['next']))
@@ -119,6 +119,6 @@ def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
         print '\nDone! \n{} comments processed in {}'.format(num_processed, datetime.datetime.now()-scrape_starttime)
 
 if __name__ == '__main__':
-    page_ids = ['singaporeair', 'sgag.sg', 'flyscoot','TheMiddleGroundSG']
+    page_ids = ['nlbsg']
     for page_id in page_ids:
-        scrapeFacebookPageFeedComments(page_id,access_token,100000)
+        scrapeFacebookPageFeedComments(page_id,access_token)

@@ -84,7 +84,7 @@ def scrapeFacebookPageStatus(page_id, access_token):
         print '\nDone! \n{} statuses processed in {}'.format(num_processed, datetime.datetime.now()-scrape_start_time)
   
 if __name__ == '__main__':   
-    page_ids = ['leehsienloong', 'josephprince', 'yoursingapore','nlbsg','TharmanShanmugaratnam','k.shanmugam.page']
+    page_ids = ['leehsienloong', 'josephprince', 'yoursingapore','nlbsg','TharmanShanmugaratnam','k.shanmugam.page','TanChuanJin1','Vivian.Balakrishnan.Sg']
     for page_id in page_ids:
         scrapeFacebookPageStatus(page_id,access_token)
     
