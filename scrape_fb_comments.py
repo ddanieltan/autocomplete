@@ -15,9 +15,7 @@ import fb_credentials #hidden file containing my unique app_id and secret_id
 ## Setting authentication variables
 APP_ID = fb_credentials.set_app_id()
 SECRET_ID = fb_credentials.set_secret_id()
-access_token = str(APP_ID) + '|' + SECRET_ID
-
-page_id = 'TheStraitsTimes'
+access_token = APP_ID + '|' + SECRET_ID
 
 def request_until_succeed(url):
   req = urllib2.Request(url)
@@ -67,7 +65,7 @@ def processFacebookComment(comment, status_id, parent_id=''):
   comment_published = comment_published.strftime('%Y-%m-%d %H:%M:%S')  
   return (comment_id, comment_message, comment_author, comment_likes, comment_published)
 
-def scrapeFacebookPageFeedComments(page_id, access_token):
+def scrapeFacebookPageFeedComments(page_id, access_token, max_comments):
     #writing data to csv
     base_path = '/home/ddan/Desktop/github/autocomplete/data'
     file_name = '{}_fb_comments.csv'.format(page_id)
@@ -81,13 +79,15 @@ def scrapeFacebookPageFeedComments(page_id, access_token):
         scrape_starttime = datetime.datetime.now()
         print 'Scraping {} comments from posts: {}\n'.format(page_id, scrape_starttime)
         
-        with open('{}_fb_statuses.csv'.format(page_id), 'rb') as csvfile:
+        
+        post_file_name = os.path.join(base_path, '{}_fb_posts.csv'.format(page_id))
+        with open(post_file_name, 'rb') as csvfile:
             reader = csv.DictReader(csvfile)
             for status in reader:
                 has_next_page = True
                 comments = getFacebookCommentFeedData(status['status_id'], access_token, 100)
                 
-                while has_next_page and comments is not None:
+                while has_next_page and comments is not None and num_processed<max_comments:
                     for comment in comments['data']:
                         w.writerow(processFacebookComment(comment, status['status_id']))
                         if 'comments' in comment:
@@ -119,4 +119,6 @@ def scrapeFacebookPageFeedComments(page_id, access_token):
         print '\nDone! \n{} comments processed in {}'.format(num_processed, datetime.datetime.now()-scrape_starttime)
 
 if __name__ == '__main__':
-    scrapeFacebookPageFeedComments(page_id,access_token)
+    page_ids = ['singaporeair', 'sgag.sg', 'flyscoot','TheMiddleGroundSG']
+    for page_id in page_ids:
+        scrapeFacebookPageFeedComments(page_id,access_token,100000)

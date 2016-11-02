@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Oct 30 17:56:12 2016
+Code adapted from: https://github.com/minimaxir/facebook-page-post-scraper
 
 @author: ddan
 """
@@ -82,9 +83,8 @@ def scrapeFacebookPageStatus(page_id, access_token):
         
         print '\nDone! \n{} statuses processed in {}'.format(num_processed, datetime.datetime.now()-scrape_start_time)
   
-if __name__ == '__main__':
-    # Top 5 FB pages amongst Singaporeans    
-    page_ids = ['singaporeair', 'sgag.sg', 'flyscoot','mediacorp.singapore','TheMiddleGroundSG']
+if __name__ == '__main__':   
+    page_ids = ['leehsienloong', 'josephprince', 'yoursingapore','nlbsg','TharmanShanmugaratnam','k.shanmugam.page']
     for page_id in page_ids:
         scrapeFacebookPageStatus(page_id,access_token)
     
