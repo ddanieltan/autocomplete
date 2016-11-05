@@ -9,8 +9,13 @@ Building my own autocomplete texting app
 To build a corpus of colloquial Singapore English, I will scrape popular Singaporean Facebook pages and comments using the Facebook Graph API.
 * __scrape_fb_posts__ : Scrapes post_id and messages of selected Facebook pages, and saves the data in a csv (/data/{}_fb_posts.csv)
 * __scrape_fb_comments__ : Scrapes comments from each post recorded in a {}_fb_post.csv, and saves the data in a csv (/data/{}_fb_comments.csv)
+* __shortlisted_fb_pages__ : Text file with shortlisted Facebook pages based on highest audience
 
 ### 2. Data cleaning ###
+To do:
+* remove stop words
+* stem my words
+* min. 3 grams
 
 ### 3. Model Building ###
 
