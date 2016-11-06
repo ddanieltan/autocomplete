@@ -119,6 +119,6 @@ def scrapeFacebookPageFeedComments(page_id, access_token):
         print '\nDone! \n{} comments processed in {}'.format(num_processed, datetime.datetime.now()-scrape_starttime)
 
 if __name__ == '__main__':
-    page_ids = ['TheStraitsTimes']
+    page_ids = ['TheMiddleGroundSG']
     for page_id in page_ids:
         scrapeFacebookPageFeedComments(page_id,access_token)
