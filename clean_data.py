@@ -79,9 +79,7 @@ if __name__ == '__main__':
 #           top         nan  josephprince    False
 #           freq    1339816       2079589  2817373
     
-#    test_dict = main_dict[-35:]
-#    print test_dict
-
-
+#    As a temporary convenience, I am saving main_dict as a csv
+main_dict.to_csv('main_dict.csv',encoding='utf-8')
 
 
