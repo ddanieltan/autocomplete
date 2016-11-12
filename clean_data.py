@@ -70,7 +70,7 @@ if __name__ == '__main__':
             pass
 
     main_dict.index = range(len(main_dict)) #Re-labeling index
-    print main_dict    
+      
 #    [3025638 rows x 3 columns]
 #    >>> print main_dict.describe()
 #           text        fbpage   isPost
@@ -78,8 +78,12 @@ if __name__ == '__main__':
 #           unique   780478            12        2
 #           top         nan  josephprince    False
 #           freq    1339816       2079589  2817373
-    
+#    
 #    As a temporary convenience, I am saving main_dict as a csv
-main_dict.to_csv('main_dict.csv',encoding='utf-8')
+#    main_dict.to_csv('main_dict.csv',encoding='utf-8')
+    
+    
+    
+    
 
 
