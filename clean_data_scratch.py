@@ -6,18 +6,40 @@ Created on Sat Nov 12 17:23:31 2016
 """
 import pandas as pd
 import os
-import csv
-import regex
 
-if __name__ == '__main__':
-    #Retrieve main_dict
-    csvpath = os.getcwd()+'/main_dict.csv'    
-    main_dict = pd.read_csv('main_dict.csv')
-#    print main_dict  
+ #Retrieve main_dict
+csvpath = '/home/ddan/Desktop/github/autocomplete/main_dict.csv'    
+main_dict = pd.read_csv(csvpath)
+
     
-    test1 = main_dict[-50:]
-    result = test1.text.encode('ascii',errors='ignore')
+test1 = main_dict[-50:]
+
+import string
+import re
+
+allow = string.letters + string.digits + '-'
+for index, row in test1.iterrows():
+    test1.loc[index, 'text'] = re.sub('[^%s]' % allow, '', row[0])
+    
+text1 = test1.text
+text1[-20:]
+
+
+test1.loc[index, 'text'] = re.sub('[^%s]' % allow, '', test1)
+
+
+ 
         
-    aa = 'สุดยอด/คุณคือฮีโร่'
-    ab = aa.encode('ascii',errors='ignore')
-    
+#    aa = 'สุดยอด/คุณคือฮีโร่'
+#    ab = aa.encode('ascii',errors='ignore')
+#import nltk
+#nltk.download()        
+#        
+#
+#from nltk.tokenize import word_tokenize
+#
+## Apply word_tokenize to each element of the list called incoming_reports
+#tokenized_reports = [word_tokenize(report) for report in test1.text]
+#
+## View tokenized_reports
+#tokenized_reports
