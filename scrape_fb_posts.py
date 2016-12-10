@@ -32,7 +32,7 @@ def request_until_succeed(url):
       print "Error for URL {}:{}".format(url,datetime.datetime.now())
   return response.read()
 
-def unicode_normalize(text):
+def unicode_normalize(text):  
     return text.translate({ 0x2018:0x27, 0x2019:0x27, 0x201C:0x22, 0x201D:0x22, 0xa0:0x20 }).encode('utf-8')
 
 def getFacebookPageFeedData(page_id, access_token, num_statuses):
