@@ -1,54 +1,42 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import sys
+import string
+from HTMLParser import HTMLParser
+from nltk.tokenize import word_tokenize
 
 ## thanks to shahram
 # sys.setdefaultencoding() does not exist, here!
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding('UTF8')
-#ab = aa.encode('ascii',errors='ignore')
 
 #Retrieve main_dict
 csvpath = '/home/ddan/Desktop/github/autocomplete/main_dict.csv'
-main_dict = pd.read_csv(csvpath)
+main_dict = pd.read_csv(csvpath, encoding='utf-8')
+main_dict['text'] = main_dict['text'].astype(str)
 test1 = main_dict[-50:]
 
-def clean_text(r):
-    # return the list of decoded cell in the Series instead 
-    return r.decode('unicode_escape').encode('ascii', 'ignore')
+html_parser = HTMLParser()
+APOSTROPHES = {
+    "'s" : "is", 
+    "'re" : "are",
+    "'t" : "not",
+    "'ve" : " have",
+    "'d" : " would"
+    }
 
-test1['text'] = test1['text'].apply(clean_text)
-test1.head()
-#test1['text'] = 'aa'
-#s = u'aสุดยอด/คุณคือฮีโร่'
-#print text_clean(s)
+#from clean_text()
+#    answer = html_parser.unescape(answer) #remove HTML artifacts
 
-import string
-import re
+def clean_text(sentence):
+  answer = sentence.decode('ascii','ignore')
+  answer = word_tokenize(answer)
+  answer = [word.encode('ascii', 'ignore').lower() for word in answer]
+  answer = [APOSTROPHES[word] if word in APOSTROPHES else word for word in answer]
+  answer = [word.translate(None, string.punctuation) for word in answer]
+  answer = [word.translate(None, string.digits) for word in answer]
+  return answer
 
-allow = string.letters + string.digits + ' -'
-for index, row in test1.iterrows():
-     test1.loc[index, 'text'] = re.sub('[^%s]' % allow, '', row[1])
+main_dict['text'] = main_dict['text'].apply(clean_text)
+main_dict.head()
 
-test1.tail()
-
-
-
-#
-# test1.loc[index, 'text'] = re.sub('[^%s]' % allow, '', test1)
-#
-# print test1
-
-#    aa = 'สุดยอด/คุณคือฮีโร่'
-#    ab = aa.encode('ascii',errors='ignore')
-#import nltk
-#nltk.download()
-#
-#
-#from nltk.tokenize import word_tokenize
-#
-## Apply word_tokenize to each element of the list called incoming_reports
-#tokenized_reports = [word_tokenize(report) for report in test1.text]
-#
-## View tokenized_reports
-#tokenized_reports
