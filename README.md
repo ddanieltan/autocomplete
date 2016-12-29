@@ -12,14 +12,15 @@ To build a corpus of colloquial Singapore English, I will scrape popular Singapo
 * __shortlisted_fb_pages__ : Text file with shortlisted Facebook pages based on highest audience
 
 ### 2. Data cleaning ###
-To do:
-* remove stop words
-* stem my words
-* min. 3 grams
+* Remove erroneous data
+* Decode and remove non-ASCII characters
+* Expand apostrophes
+* Remove punctuation
+* Tokenize words
 
-### 3. Model Building ###
+### 3. Building a Language Model ###
 
-### 4. Deploying app ###
+### 4. Deploying app online ###
 
 ### 5. Reports and conclusion ###
 
