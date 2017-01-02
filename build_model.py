@@ -7,8 +7,9 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist, ConditionalFreqDist, ConditionalProbDist, LaplaceProbDist
 
 #Load cleaned corpus
-main_dict = pickle.load(open("/tmp/cleaned.p", "rb"))
-test1 = main_dict['text'].loc[:25]
+with open("/tmp/cleaned.p","rb") as f:
+    main_dict = pickle.load(f)
+test1 = main_dict['text'].loc[:1000]
 
 unigram_fd = FreqDist()
 bigram_cfd = ConditionalFreqDist()

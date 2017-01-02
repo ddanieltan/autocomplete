@@ -4,18 +4,14 @@ import sys
 from HTMLParser import HTMLParser
 from nltk.tokenize import word_tokenize
 import re
+import pickle
 
 ## thanks to shahram
 # sys.setdefaultencoding() does not exist, here!
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding('UTF8')
 
-#Retrieve main_dict
-csvpath = '/home/ddan/Desktop/github/autocomplete/main_dict.csv'
-main_dict = pd.read_csv(csvpath, encoding='utf-8')
-main_dict['text'] = main_dict['text'].astype(str)
-test1 = main_dict[-50:]
-
+#Globals
 html_parser = HTMLParser()
 APOSTROPHES = {
     "'s" : " is", 
@@ -33,7 +29,7 @@ def remove_urls(text):
 
 def replace_apostrophes(text):
     pattern = re.compile(r'\b(' + '|'.join(APOSTROPHES.keys()) + r')\b')
-    return pattern.sub(lambda x:test APOSTROPHES[x.group()], text)
+    return pattern.sub(lambda x: APOSTROPHES[x.group()], text)
     
 def remove_punctuation_digits(input_text):
     cleaned = input_text.lower()
@@ -47,11 +43,12 @@ def remove_punctuation_digits(input_text):
     cleaned = re.sub(' \.', '', cleaned)
     cleaned = re.sub('\.+', '', cleaned)
     cleaned = re.sub('\'\'','', cleaned)
+    cleaned = re.sub('nan','',cleaned)
     return cleaned
 
 def clean_text(sentence):
     answer = sentence.decode('utf8','ignore')
-    answer = answer.encode('ascii','ignore').lower()
+    answer = sentence.encode('ascii','ignore').lower()
     answer = remove_urls(answer)
     answer = replace_apostrophes(answer)
     answer = remove_punctuation_digits(answer)
@@ -59,8 +56,21 @@ def clean_text(sentence):
     answer = filter(None,answer) #removing blank elements
     return answer
 
-main_dict['text'] = main_dict['text'].apply(clean_text)
-main_dict.head()
+def main():
+    #Retrieve main_dict
+    csvpath = '/home/ddan/Desktop/github/autocomplete/main_dict.csv'
+    main_dict = pd.read_csv(csvpath, encoding='utf-8')
+    main_dict['text'] = main_dict['text'].astype(str)
+    
+    main_dict['text'] = main_dict['text'].apply(clean_text)
+    
+    #Saving cleaned dataframe as a pickle
+    with open("/tmp/cleaned.p","wb") as f:
+        main_dict = pickle.dump(main_dict,f)
 
-import pickle
-pickle.dump(main_dict, open("/tmp/cleaned.p", "wb"))
+if __name__ == "__main__":
+    main()
+
+
+
+
