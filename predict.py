@@ -24,7 +24,6 @@ def predict_sentence(gram, word, n = 50):
         # Choose a pair with weighted probability from the choice list
         word = weighted_choice(choices)[1]
        
-
 def main():
     start = time.time()    
     print 'Loading language model...'
