@@ -58,15 +58,15 @@ def clean_text(sentence):
 
 def main():
     #Retrieve main_dict
-    csvpath = '/home/ddan/Desktop/github/autocomplete/main_dict.csv'
-    main_dict = pd.read_csv(csvpath, encoding='utf-8')
+    csvpath = '/home/ddan/Desktop/github/autocomplete'
+    main_dict = pd.read_csv(csvpath+'/main_dict.csv', encoding='utf-8')
     main_dict['text'] = main_dict['text'].astype(str)
     
     main_dict['text'] = main_dict['text'].apply(clean_text)
-    main_dict = main_dict
+    main_dict = main_dict[main_dict.fbpage != 'josephprince']
     
     #Saving cleaned dataframe as a pickle
-    with open("/tmp/cleaned.p","wb") as f:
+    with open(csvpath+'/data/cleaned.p','wb') as f:
         pickle.dump(main_dict,f)
 
 if __name__ == "__main__":
