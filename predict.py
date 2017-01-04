@@ -2,9 +2,7 @@
 import pickle
 import time
 
-unigrams = None
-bigrams = None
-trigrams = None
+
 
 def main():
     start = time.time()    

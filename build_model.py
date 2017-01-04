@@ -1,52 +1,88 @@
 # -*- coding: utf-8 -*-
-
 import pickle
-from collections import Counter, OrderedDict
-from nltk.util import ngrams
-from nltk.tokenize import word_tokenize
-from nltk.probability import FreqDist, ConditionalFreqDist, ConditionalProbDist, LaplaceProbDist
+import random
 
-#Load cleaned corpus
-with open("/tmp/cleaned.p","rb") as f:
-    main_dict = pickle.load(f)
-test1 = main_dict['text'].loc[:1000]
+#Building unigram dictionary
+def build_unigrams(sentences):
+    unigrams = dict()
+    for sentence in sentences:
+        for word in sentence:
+            if unigrams.has_key(word):
+                unigrams[word] += 1
+            else:
+                unigrams[word] = 1 #new entry for new word
+    #Return sorted list of (word,count) from most to least
+    return sorted(unigrams.items(), key=lambda (_, count): -count)
 
-unigram_fd = FreqDist()
-bigram_cfd = ConditionalFreqDist()
-trigram_cfd = ConditionalFreqDist()
-quadgram_cfd = ConditionalFreqDist()
+def build_bigrams(sentences):
+    bigrams = dict()
+    for sentence in sentences:
+        for i in xrange(len(sentence)-1):
+            key = (sentence[i],sentence[i+1])
+            if bigrams.has_key(key):
+                bigrams[key] += 1
+            else:
+                bigrams[key] = 1
+    return sorted(bigrams.items(), key=lambda (_, count): -count)
 
-unigram_pd = None
-bigram_cpd = None
-trigram_cpd = None
-quadgram_cpd = None
+def build_trigrams(sentences):
+    trigrams = dict()
+    for sentence in sentences:
+        for i in xrange(len(sentence)-2):
+            key = tuple(sentence[i:i+3])
+            if trigrams.has_key(key):
+                trigrams[key] += 1
+            else:
+                trigrams[key] = 1
+    return sorted(trigrams.items(), key=lambda (_, count): -count)
 
-prev_word = None
-prev_2_word = None
-prev_3_word = None
+#Applying weighted probabilities
+def weighted_choice(choices):
+   total = sum(w for c, w in choices)
+   r = random.uniform(0, total)
+   upto = 0
+   for c, w in choices:
+      if upto + w > r:
+         return c
+      upto += w
 
-for sentence in test1:
-    for word in sentence:
-        if word.isalpha():
-            unigram_fd[word] += 1
-            bigram_cfd[prev_word][word] += 1
-            trigram_cfd[tuple([prev_2_word, prev_word])][word] += 1
-            quadgram_cfd[tuple([prev_3_word, prev_2_word, prev_word])][word] += 1
-            prev_3_word = prev_2_word
-            prev_2_word = prev_word
-            prev_word = word
+def predict_sentence(gram, word, n = 50):
+    for i in xrange(n):
+        print word,
+        # Get all possible elements ((first word, second word), frequency)
+        choices = [element for element in gram if element[0][0] == word]
+        if not choices:
+            break
+        
+        # Choose a pair with weighted probability from the choice list
+        word = weighted_choice(choices)[1]
 
-unigram_pd = LaplaceProbDist(unigram_fd, bins=unigram_fd.N())
-bigram_cpd = ConditionalProbDist(bigram_cfd, LaplaceProbDist, bins=len(bigram_cfd.conditions()))
-trigram_cpd = ConditionalProbDist(trigram_cfd, LaplaceProbDist, bins=len(trigram_cfd.conditions()))
-quadgram_cpd = ConditionalProbDist(quadgram_cfd, LaplaceProbDist, bins=len(quadgram_cfd.conditions()))
-
-def next_word(text):
-    context = word_tokenize(text)
-    last_word = context[-1] ### Stuck handling words that are not in the corpus
-    if last_word in unigram    
-    word = bigram_cfd[context[-2:]].max()
-    return word
-
-aa = "This is a funny"
-next_word(aa)
+def main():
+    #Load cleaned corpus
+    with open("/tmp/cleaned.p","rb") as f:
+        main_dict = pickle.load(f)
+    test1 = main_dict['text'].loc[:1000]
+    
+    #Build ngram dictionaries
+    unigrams = build_unigrams(main_dict['text'])
+    bigrams = build_bigrams(main_dict['text'])
+    trigrams = build_trigrams(main_dict['text'])
+    
+    #Save dictionaries    
+    with open("/tmp/unigrams.p","wb") as f:
+        unigrams = pickle.dump(main_dict,f)
+    with open("/tmp/bigrams.p","wb") as f:
+        bigrams = pickle.dump(main_dict,f)
+    with open("/tmp/trigrams.p","wb") as f:
+        trigrams = pickle.dump(main_dict,f)
+    
+    #tests
+    for word in ['and', 'he', 'she', 'when', 'john', 'never', 'i', 'how']:
+        print "Start word: %s" % word
+    
+        print "3-gram sentence: \"",
+        predict_sentence(trigrams,word, 20)
+        print "\""
+    
+if __name__ = "__main__":
+    main()

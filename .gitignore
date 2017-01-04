@@ -1,3 +1,5 @@
 fb_credentials.py
 *.pyc
 main_dict.csv
+data/cleaned.p
+data/trigrams.p
