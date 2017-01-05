@@ -3,3 +3,4 @@ fb_credentials.py
 main_dict.csv
 data/cleaned.p
 data/trigrams.p
+data/trigrams.sqlite

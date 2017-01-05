@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pickle
+import cPickle as pickle
 import time
 import random
 
@@ -33,13 +33,17 @@ def main():
         trigrams = pickle.load(f)
     print 'Model loaded in {} seconds'.format(time.time()-start)
     
-    #tests
-    for word in ['and', 'he', 'she', 'when', 'what', 'never', 'i', 'how']:
-        print "Start word: %s" % word
+    while True:    
+        start_word = raw_input('\nEnter your starting word: ')
+        predict_sentence(trigrams,start_word,20)    
     
-        print "3-gram sentence: \"",
-        predict_sentence(trigrams,word, 20)
-        print "\""
+    #tests
+#    for word in ['and', 'he', 'she', 'when', 'what', 'never', 'i', 'how']:
+#        print "Start word: %s" % word
+#    
+#        print "3-gram sentence: \"",
+#        predict_sentence(trigrams,word, 20)
+#        print "\""
 
 if __name__ == "__main__":
     main()
