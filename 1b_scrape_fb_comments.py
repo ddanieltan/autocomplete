@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 30 17:56:12 2016
-
-@author: ddan
-"""
 import urllib2
 import json
 import datetime

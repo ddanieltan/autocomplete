@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 30 17:56:12 2016
-Code adapted from: https://github.com/minimaxir/facebook-page-post-scraper
-
-@author: ddan
-"""
 import urllib2
 import json
 import datetime
@@ -87,10 +81,3 @@ if __name__ == '__main__':
     page_ids = ['leehsienloong', 'josephprince', 'yoursingapore','nlbsg','TharmanShanmugaratnam','k.shanmugam.page','TanChuanJin1','Vivian.Balakrishnan.Sg']
     for page_id in page_ids:
         scrapeFacebookPageStatus(page_id,access_token)
-    
-    
-    
-#    test_status = getFacebookPageFeedData(page_id, access_token, 1)["data"][0]    
-#    processed_test_status = processFacebookPageFeedStatus(test_status)
-#    print processed_test_status
-    #scrapeFacebookPageFeedComments(page_id,access_token)

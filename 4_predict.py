@@ -3,7 +3,6 @@ import cPickle as pickle
 import time
 import random
 
-#Applying weighted probabilities
 def weighted_choice(choices):
    total = sum(weight for choice, weight in choices)
    r = random.uniform(0, total)
@@ -25,6 +24,7 @@ def predict_sentence(gram, word, n = 50):
         word = weighted_choice(choices)[1]
        
 def main():
+    #Load Language Model    
     start = time.time()    
     print 'Loading language model...'
     csvpath = '/home/ddan/Desktop/github/autocomplete/data/'       
@@ -33,14 +33,14 @@ def main():
         trigrams = pickle.load(f)
     print 'Model loaded in {} seconds'.format(time.time()-start)
     
+    #To test 1 word at a time
     while True:    
         start_word = raw_input('\nEnter your starting word: ')
         predict_sentence(trigrams,start_word,20)    
     
-    #tests
+    #To test multiple words
 #    for word in ['and', 'he', 'she', 'when', 'what', 'never', 'i', 'how']:
 #        print "Start word: %s" % word
-#    
 #        print "3-gram sentence: \"",
 #        predict_sentence(trigrams,word, 20)
 #        print "\""
