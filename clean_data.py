@@ -63,7 +63,6 @@ def main():
     main_dict['text'] = main_dict['text'].astype(str)
     
     main_dict['text'] = main_dict['text'].apply(clean_text)
-    main_dict = main_dict[main_dict.fbpage != 'josephprince']
     
     #Saving cleaned dataframe as a pickle
     with open(csvpath+'/data/cleaned.p','wb') as f:

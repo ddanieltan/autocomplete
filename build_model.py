@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pickle
+import cPickle as pickle
 
 ##Building unigram dictionary
 #def build_unigrams(sentences):
